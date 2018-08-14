@@ -14,6 +14,8 @@ app.get('/', (req, res) => {
   res.send('Database konek');
 });
 
+//RESRAURANT
+
 app.get('/api/restaurant', (req, res) => {
   db.find({}, (err, done) => {
     if (err) {
@@ -25,7 +27,7 @@ app.get('/api/restaurant', (req, res) => {
 });
 
 app.get('/api/restaurant/:name', (req, res) => {
-  db.find({ name: req.params.name }, (err, done) => {
+  db.find({ _id: req.params.name }, (err, done) => {
     if (err) {
       res.send('error ambil data');
       return;
@@ -47,22 +49,6 @@ app.post('/api/restaurant', (req, res) => {
       return;
     }
     res.send(done);
-  });
-});
-
-app.put('/api/restaurant/:id/foods', (req, res) => {
-  console.log(req.body);
-  const data = {
-    name: req.body.name,
-    price: req.body.price,
-    image: req.body.image
-  };
-  db.update({ _id: req.params.id }, { $push: { foods: data } }, (err, done) => {
-    if (err) {
-      res.send('Error Post');
-      return;
-    }
-    res.send('oke');
   });
 });
 
@@ -88,6 +74,34 @@ app.delete('/api/restaurant/:id', (req, res) => {
       return;
     }
     res.send('oke berhasil delete');
+  });
+});
+
+//makanan
+
+app.get('/api/restaurant/:name/foods', (req, res) => {
+  db.find({ foods: { $elemMatch: { name: req.params.name } } }, (err, done) => {
+    if (err) {
+      res.send('error ambil data');
+      return;
+    }
+    res.send(done);
+  });
+});
+
+app.put('/api/restaurant/:id/foods', (req, res) => {
+  console.log(req.body);
+  const data = {
+    name: req.body.name,
+    price: req.body.price,
+    image: req.body.image
+  };
+  db.update({ _id: req.params.id }, { $push: { foods: data } }, (err, done) => {
+    if (err) {
+      res.send('Error Post');
+      return;
+    }
+    res.send('oke');
   });
 });
 

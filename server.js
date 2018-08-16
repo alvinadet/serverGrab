@@ -140,8 +140,7 @@ app.post('/api/restaurant', (req, res) => {
   const data = {
     name: req.body.name,
     image: req.body.image,
-    address: req.body.address,
-    foods: []
+    address: req.body.address
   };
   db.toko.insert(data, (err, done) => {
     if (err) {
@@ -158,7 +157,7 @@ app.put('/api/restaurant/:name', (req, res) => {
     image: req.body.image,
     address: req.body.address
   };
-  db.toko.update({ name: req.params.name }, data, {}, (err, done) => {
+  db.toko.update({ _id: req.params.name }, data, {}, (err, done) => {
     if (err) {
       res.send('Error Put');
       return;
